@@ -138,7 +138,7 @@ void main(void) {
 
     if (fire > 0.5) {
 
-      if ((vTC.s < 350./512.) && (vTC.s > 128./512.) && (vTC.t < 256./512.)) {
+      if ((vTC.s < 256./512.) && (vTC.s > (128. + 50.)/512.) && (vTC.t < (256. + 50.)/512.)) {
         sm = 0.75;
         sj = 0.75;
         sh = 0.75;
@@ -317,6 +317,19 @@ precision highp float;
   uniform float GpK;//=0.0146,
   uniform float pKNa;//=0.03,
 
+  uniform float scaleIKr;
+  uniform float scaleIKs;
+  uniform float scaleIK1;
+  uniform float scaleIto;
+  uniform float scaleINa;
+  uniform float scaleIbNa;
+  uniform float scaleICaL;
+  uniform float scaleIbCa;
+  uniform float scaleINaK;
+  uniform float scaleINaCa;
+  uniform float scaleIpCa;
+  uniform float scaleIpK;
+
 
 
 
@@ -372,7 +385,10 @@ void main(void) {
   float INa=GNa*sm*sm*sm*sh*sj*(v-Ena);
   float IKr=Gkr*Gkrfactor*sxr1*sxr2*(v-Ek);
   float IKs=Gks*sxs*sxs*(v-Eks);
-  float sItot=IKr+IKs+IK1+Ito+INa+IbNa+ICaL+IbCa+INaK+INaCa+IpCa+IpK;
+  //float sItot= scaleIKr*IKr + scaleIKs*IKs + scaleIK1*IK1 + scaleIto*Ito + scaleINa*INa + scaleIbNa*IbNa + scaleICaL*ICaL + scaleIbCa*IbCa + scaleINaK*INaK + scaleINaCa*INaCa + scaleIpCa*IpCa + scaleIpK*IpK;
+
+    float sItot=IKr+IKs+IK1+Ito+INa+IbNa+ICaL+IbCa+INaK+INaCa+IpCa+IpK;
+
 
   float dNai=-(INa+IbNa+3.*INaK+3.*INaCa)*inverseVcFCAP;
   Nai += dt*dNai;
@@ -426,7 +442,7 @@ requestAnimFrame = (function(){
 var gl, c, FBO0, FBO1, FBO2, FBO3, FBO4, FBO5,
     prog0, prog1, prog2, prog3, prog4, prog_show, prog_tip,
     texture0, texture1, texture2, texture3, texture4, texture5,
-    xc2 = yc2 = 0, ctx2, plot = true, x_plot = y_plot = 256, path = true,
+    xc2 = yc2 = 0, ctx2, plot = true, x_plot = 300, y_plot = 256, path = false,
     delay = 10, frames = 0, time, animation = "animate", time0,
     nx = 512,  dt = 0.05,  nit = 10,  v0 = -85.23,
      tperiod1= 100., pperiod1 = 90.,
@@ -451,6 +467,19 @@ var gl, c, FBO0, FBO1, FBO2, FBO3, FBO4, FBO5,
   var xGpK = xGpKog=0.0146;
   var xpKNa = xpKNaog=0.03;
 
+  var xscaleKr = 1.;
+  var xscaleIKs = 1.;
+  var xscaleIK1 = 1.;
+  var xscaleIto = 1.;
+  var xscaleINa = 1.;
+  var xscaleIbNa = 1.;
+  var xscaleICaL = 1.;
+  var xscaleIbCa = 1.;
+  var xscaleINaK = 1.;
+  var xscaleINaCa = 1.;
+  var xscaleIpCa = 1.;
+  var xscaleIpK = 1.;
+
 ///////////////////////////
 
 
@@ -472,6 +501,7 @@ var secondSix = 0;
 //////
 
 function main() {
+
    var c = document.getElementById("canvas");
    var err = "Your browser does not support ";
    if (!window.WebGLRenderingContext){
@@ -567,7 +597,24 @@ function main() {
   uniform float KmNa;//=40.0,
   uniform float KpCa;//=0.0005,
   uniform float GpK;//=0.0146,
-  uniform float pKNa;//=0.03,*/
+  uniform float pKNa;//=0.03,
+
+  var xscaleKr = 1;
+  var xscaleIKs = 1;
+  var xscaleIK1 = 1;
+  var xscaleIto = 1;
+  var xscaleINa = 1;
+  var xscaleIbNa = 1;
+  var xscaleICaL = 1;
+  var xscaleIbCa = 1;
+  var xscaleINaK = 1;
+  var xscaleINaCa = 1;
+  var xscaleIpCa = 1;
+  var xscaleIpK = 1;
+
+
+
+  */
 
 
 
@@ -581,15 +628,25 @@ function main() {
   gl.uniform1f(gl.getUniformLocation(prog4, "Gkr"), xGkr);
   gl.uniform1f(gl.getUniformLocation(prog4, "Gks"), xGks);
   gl.uniform1f(gl.getUniformLocation(prog4, "Gto"), xGto);
-
   gl.uniform1f(gl.getUniformLocation(prog4, "GbNa"), xGbNa);
   gl.uniform1f(gl.getUniformLocation(prog4, "GbCa"), xGbCa);
   gl.uniform1f(gl.getUniformLocation(prog4, "GpCa"), xGpCa);
   gl.uniform1f(gl.getUniformLocation(prog4, "KmNa"), xKmNa);
-
   gl.uniform1f(gl.getUniformLocation(prog4, "KpCa"), xKpCa);
   gl.uniform1f(gl.getUniformLocation(prog4, "GpK"), xGpK);
   gl.uniform1f(gl.getUniformLocation(prog4, "pKNa"), xpKNa);
+
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleKr"), 1);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIKs"), 1);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIK1"), 1);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIto"), 1);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleINa"), 1);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIbNa"), 1);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleICaL"), 1);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIbCa"), 1);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleINaK"), 1);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIpCa"), 1);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIpK"), 1);
 
 
   /////////////////////////
@@ -616,7 +673,7 @@ function main() {
   gl.linkProgram(prog_tip);
   gl.useProgram(prog_tip);
   gl.uniform1i(gl.getUniformLocation(prog_tip, "samp0"), 0);
-  gl.uniform1i(gl.getUniformLocation(prog_tip, "path"), 1);
+  gl.uniform1i(gl.getUniformLocation(prog_tip, "path"), 0);
 
   tau();
   var data_0=[], data_1=[], data_2=[], data_3=[], data_4=[];
@@ -965,7 +1022,7 @@ function draw(){
    gl.readPixels(x_plot, y_plot, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, re);
    ctx2.beginPath();
    ctx2.moveTo(xc2, 256 - yc2);
-   xc2 += .5;  yc2 = re[0];
+   xc2 += .2;  yc2 = re[0];
 
 
    if (shotsEnabled == 1) {
@@ -982,13 +1039,26 @@ function draw(){
 
 
 
-   if(xc2 > 1000){
-    xc2 = 0;
-    ctx2.clearRect (0, 0, 1000, 256);
-    ctx2.moveTo(xc2, 256 - yc2);}
-   ctx2.lineTo(xc2, 256 - yc2);
-   ctx2.stroke();
-  }
+   if (recordSimulation == 1) {
+       if(changecount == 0){//xc2 > 1001){
+        xc2 = 0;
+        ctx2.clearRect (0, 0, 1500, 256);
+        ctx2.moveTo(xc2, 256 - yc2);}
+      }
+    }
+    else {
+
+       if (xc2 > 1000) {
+        xc2 = 0;
+        ctx2.clearRect (0, 0, 1500, 256);
+        ctx2.moveTo(xc2, 256 - yc2);
+        }
+      }
+
+    
+
+    ctx2.lineTo(xc2, 256 - yc2);
+    ctx2.stroke();
 
   frames++;
 
@@ -1018,20 +1088,46 @@ function draw(){
   }
 
 
+  if (recordSimulation == 0) {
+    return;
+  }
+
+if (changecount == -1) {
+
+    
+    var checkRes = document.getElementById('canvas').toDataURL("image/png");
+    oldString += checkRes;
+    $.post("getpic.php", { src: oldString } );
+  
+    //changecount = 0;
+
+   
+    /*ctx2.clearRect (0, 0, 1500, 256);
+    ctx2.moveTo(0, 256);}
+    ctx2.lineTo(0, 256 );
+    ctx2.stroke();*/
+
+    reset();
+}
 
 
-/*
 if (pathGo == 0) {
 
-setPath(true);
+
 pathGo = 1;
 }
 
 changecount++;
 
-if (changecount > (500)) {
+if (changecount == 3000) {
 
-  changecount = 0;
+setPath(true);
+}
+
+
+if (changecount > (5000)) {
+
+  changecount = -1;
 
 
   var na = pathex[pathit][0];
@@ -1044,9 +1140,13 @@ if (changecount > (500)) {
     var tout = na+"x"+kr+""+check;
     $.post("getpic.php", { src: tout } );
 
+    oldString = na+"x"+kr+"nt";
+
     check = document.getElementById('canvas2').toDataURL("image/png");
     tout = na+"x"+kr+"ap"+check;
     $.post("getpic.php", { src: tout } );
+
+
 
   }
 
@@ -1055,8 +1155,11 @@ if (changecount > (500)) {
      na = pathex[pathit][0];
      kr = pathex[pathit][1];
 
-    changeConductances(0, xGNaog * paramChange[na]);
-    changeConductances(1, xGkrog * paramChange[kr]); 
+    //changeConductances(0, xGNaog * paramChangeNa[na]);
+    //changeConductances(1, xGkrog * paramChangeKr[kr]); 
+
+    changeConductances(0, paramChangeNa[na]);
+    changeConductances(1, paramChangeKr[kr]); 
 
     //console.log(pathex[pathit][0]+", "+pathex[pathit][1]+", "+pathex[pathit][2]);
    // alert(pathex[pathit][0]+", "+pathex[pathit][1]+", "+pathex[pathit][2]);
@@ -1064,18 +1167,24 @@ if (changecount > (500)) {
    if (na == -1) {
     alert("DONE");
    }
-
-
     //alert("hit");
     setPath(false);
     pathGo = 0
-    //setPath(true);
-}*/
+}
 
 }
 
-var paramChange = [.5, .6, .7, .8, .9, 1, 1.2, 1.4, 1.6, 1.8, 2];
+//var oldString ="";
+//var paramChangeNa = [.5, .6, .7, .8, .9, 1, 1.2, 1.4, 1.6, 1.8, 2];
+//var paramChangeKr = [.5, .6, .7, .8, .9, 1, 1.2, 1.4, 1.6, 1.8, 2];
+
+var paramChangeNa = [.1, 2.59, 5.08, 7.57, 10.06, 12.55, 15.04, 17.53, 20.02, 22.51, 25];
+var paramChangeKr = [.03, .107, .184, .261, .338, .415, .492, .569, .646, .723, .8];
+
+//17.53x.415
+
 var pathit = 0;
+var recordSimulation = 0;
 
 var pathex = [ 
 
@@ -1089,7 +1198,7 @@ var pathex = [
 
 
 
-[5,5,0],
+//[5,5,0],
 
 [6,5,1],
 [6,4,1],
@@ -1100,8 +1209,8 @@ var pathex = [
 
 
 
-[5,5,0],
-[6,5,0],
+/*[5,5,0],
+[6,5,0],*/
 
 [7,5,1],
 [7,4,1],
@@ -1112,9 +1221,9 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [6,5,0],
-[7,5,0],
+[7,5,0],*/
 
 [8,5,1],
 [8,4,1],
@@ -1125,10 +1234,10 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [6,5,0],
 [7,5,0],
-[8,5,0],
+[8,5,0],*/
 
 [9,5,1],
 [9,4,1],
@@ -1139,11 +1248,11 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [6,5,0],
 [7,5,0],
 [8,5,0],
-[9,5,0],
+[9,5,0],*/
 
 [10,5,1],
 [10,4,1],
@@ -1154,7 +1263,7 @@ var pathex = [
 //////////////Q1///////////
 
 
-[5,5,0],
+//[5,5,0],
 
 [4,5,1],
 [4,4,1],
@@ -1165,8 +1274,8 @@ var pathex = [
 
 
 
-[5,5,0],
-[4,5,0],
+/*[5,5,0],
+[4,5,0],*/
 
 [3,5,1],
 [3,4,1],
@@ -1177,9 +1286,9 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [4,5,0],
-[3,5,0],
+[3,5,0],*/
 
 [2,5,1],
 [2,4,1],
@@ -1190,10 +1299,10 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [4,5,0],
 [3,5,0],
-[2,5,0],
+[2,5,0],*/
 
 [1,5,1],
 [1,4,1],
@@ -1204,11 +1313,11 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [4,5,0],
 [3,5,0],
 [2,5,0],
-[1,5,0],
+[1,5,0],*/
 
 [0,5,1],
 [0,4,1],
@@ -1218,8 +1327,8 @@ var pathex = [
 [0,0,1],
 //////////////Q2///////////
 
-[5,5,0],
-[4,5,0],
+//[5,5,0],
+//[4,5,0],
 
 [4,6,1],
 [4,7,1],
@@ -1229,9 +1338,9 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [4,5,0],
-[3,5,0],
+[3,5,0],*/
 
 [3,6,1],
 [3,7,1],
@@ -1241,10 +1350,10 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [4,5,0],
 [3,5,0],
-[2,5,0],
+[2,5,0],*/
 
 [2,6,1],
 [2,7,1],
@@ -1254,11 +1363,11 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [4,5,0],
 [3,5,0],
 [2,5,0],
-[1,5,0],
+[1,5,0],*/
 
 [1,6,1],
 [1,7,1],
@@ -1268,12 +1377,12 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [4,5,0],
 [3,5,0],
 [2,5,0],
 [1,5,0],
-[0,5,0],
+[0,5,0],*/
 
 [0,6,1],
 [0,7,1],
@@ -1282,7 +1391,7 @@ var pathex = [
 [0,10,1],
 //////////////Q3///////////
 
-[5,5,0],
+//[5,5,0],
 
 [5,6,1],
 [5,7,1],
@@ -1292,8 +1401,8 @@ var pathex = [
 
 
 
-[5,5,0],
-[6,5,0],
+/*[5,5,0],
+[6,5,0],*/
 
 [6,6,1],
 [6,7,1],
@@ -1303,9 +1412,9 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [6,5,0],
-[7,5,0],
+[7,5,0],*/
 
 [7,6,1],
 [7,7,1],
@@ -1315,10 +1424,10 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [6,5,0],
 [7,5,0],
-[8,5,0],
+[8,5,0],*/
 
 [8,6,1],
 [8,7,1],
@@ -1328,11 +1437,11 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [6,5,0],
 [7,5,0],
 [8,5,0],
-[9,5,0],
+[9,5,0],*/
 
 [9,6,1],
 [9,7,1],
@@ -1342,12 +1451,12 @@ var pathex = [
 
 
 
-[5,5,0],
+/*[5,5,0],
 [6,5,0],
 [7,5,0],
 [8,5,0],
 [9,5,0],
-[10,5,0],
+[10,5,0],*/
 
 [10,6,1],
 [10,7,1],
@@ -1375,18 +1484,22 @@ function anim(){
    gl.uniform1f(gl.getUniformLocation(prog0, "yesstim"), yesstim);
    switch ( animation ){
      case "reset":
-      var data_0=[], data_1=[], data_2=[], data_3=[], data_4=[];
-      for (var y = 0; y < nx; y++)
-      for (var x = 0; x < nx; x++){
-       var xy = x + .7*y - 400;
-       var ex = Math.exp(-.0003*xy*xy);
-       data_0.push( 0, 1 -  ex, 1 -  ex, 0 ); // m j h 0
-       data_1.push( 0.00621, 0.4712, 0, 1 );  // r1 r2 r s
-       data_2.push( 0, 0.79, 0.9755, .7*ex);  // d f f2 xs
-       data_3.push( 0.000126, 3.64, 0.00036, 0.9 ); // Cai CaSR CaSS RR
-       if (y > 450) data_4.push( v0 , 8.604, 136.89, 0.99 ); // v  Nai Ki fcass
-       else data_4.push( v0 + 30*Math.exp(-.001*(xy-30)*(xy-30)), 8.604, 136.89, 0.99 );
-      }
+
+
+  var data_0=[], data_1=[], data_2=[], data_3=[], data_4=[];
+  for (var y = 0; y < nx; y++)
+  for (var x = 0; x < nx; x++){
+      var xy = x + .7*y - 800;
+      var ex = 0//Math.exp(-.0003*xy*xy);
+      data_0.push( 0, 1 -  ex, 1 -  ex, 0 ); // m j h 0
+      data_1.push( 0.00621, 0.4712, 0, 1 );  // r1 r2 r s
+      data_2.push( 0, 0.79, 0.9755, .7*ex);  // d f f2 xs
+      data_3.push( 0.000126, 3.64, 0.00036, 0.9 ); // Cai CaSR CaSS RR
+      if (y > 800) data_4.push( v0 , 8.604, 136.89, 0.99 ); // v  Nai Ki fcass
+      else data_4.push( v0 , 8.604, 136.89, 0.99 );//+ 30*Math.exp(-.001*(xy-30)*(xy-30))
+  }
+
+
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, texture0);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, nx, nx, 0,
@@ -1412,6 +1525,19 @@ function anim(){
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, nx, nx, 0,
        gl.RGBA, gl.FLOAT, new Float32Array(data_4));
       animation = "animate";
+
+////////////////////////////////////////////////////////////////
+     initialGo = 5;
+     secondShot = 0;
+     shotsEnabled = 1;
+
+     firstSix = 0;
+     secondSix = 0;
+
+     gl.useProgram(prog0);
+     gl.uniform1f(gl.getUniformLocation(prog0, "init"), initialGo);
+     ////////////////////////////////////////////////////////////
+
      case "animate":
        if (delay == 0) requestAnimFrame(anim);
        else setTimeout("requestAnimFrame(anim)", delay);
@@ -1583,6 +1709,28 @@ function changeConductances(index, value) {
               break;
     case (10): xpKNa = value;
               break;
+    case (11): xscaleKr = value;
+              break;
+    case (12): xscaleIKs = value;
+              break;
+    case (13): xscaleIK1 = value;
+              break;
+    case (14): xscaleIto = value;
+              break;
+    case (15): xscaleINa = value;
+              break;
+    case (16): xscaleIbNa = value;
+              break;
+    case (17): xscaleICaL = value;
+              break;
+    case (18): xscaleIbCa = value;
+              break;
+    case (19): xscaleINaK = value;
+              break;
+    case (20): xscaleIpCa = value;
+              break;
+    case (21): xscaleIpK = value;
+              break;
 
   }
 
@@ -1598,6 +1746,18 @@ function changeConductances(index, value) {
   gl.uniform1f(gl.getUniformLocation(prog4, "KpCa"), xKpCa);
   gl.uniform1f(gl.getUniformLocation(prog4, "GpK"), xGpK);
   gl.uniform1f(gl.getUniformLocation(prog4, "pKNa"), xpKNa);
+
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleKr"), xscaleKr);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIKs"), xscaleIKs);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIK1"), xscaleIK1);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIto"), xscaleIto);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleINa"), xscaleINa);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIbNa"), xscaleIbNa);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleICaL"), xscaleICaL);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIbCa"), xscaleIbCa);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleINaK"), xscaleINaK);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIpCa"), xscaleIpCa);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIpK"), xscaleIpK);
 
 }
 
@@ -1622,7 +1782,7 @@ fps<input size="1" id="framerate">
 
 </p><p><button onclick="reset()">Reset</button>
 <input type="button" onclick="run()" value="Stop" size="1" id="runBtn">
-<input type="checkbox" onclick="setPath(checked);" checked="" id="pathBox">pAth
+<input type="checkbox" onclick="setPath(checked);" checked="" id="pathBox">Path
 <input type="checkbox" onclick="setPlot(checked);" checked="" id="plotBox">Plot
 <input type="checkbox" onclick="setVstimcoord(checked);"  id="stimBox">Stimulate
 </p><p>Check "plot" to draw <i>V(t)</i> 
@@ -1630,7 +1790,7 @@ fps<input size="1" id="framerate">
 </p><hr>
 <img src="./TNNP model. Spiral tip dynamics perriodic_files/colorbartnnp.gif">
 
-<canvas id="canvas2" width="500" height="256"></canvas>
+<canvas id="canvas2" width="1000" height="256"></canvas>
 
 <br>
 <br>
@@ -1647,30 +1807,61 @@ and y:
 
 Conductances:
 <br>
-GNa:<input size="2" value="14.838" onchange="changeConductances(0, this.value)">
+GNa:<input size="5" value="14.838" onchange="changeConductances(0, this.value)">
 <br>
-Gkr:<input size="2" value="0.153" onchange="changeConductances(1, this.value)">
+Gkr:<input size="5" value="0.153" onchange="changeConductances(1, this.value)">
 <br>
-Gks:<input size="2" value="0.098" onchange="changeConductances(2, this.value)">
+Gks:<input size="5" value="0.098" onchange="changeConductances(2, this.value)">
 <br>
-Gto:<input size="2" value="0.153" onchange="changeConductances(3, this.value)">
+Gto:<input size="5" value="0.153" onchange="changeConductances(3, this.value)">
 
 <br>
-GbNa:<input size="2" value="0.00029" onchange="changeConductances(4, this.value)">
+GbNa:<input size="5" value="0.00029" onchange="changeConductances(4, this.value)">
 <br>
-GbCa:<input size="2" value="0.000592" onchange="changeConductances(5, this.value)">
+GbCa:<input size="5" value="0.000592" onchange="changeConductances(5, this.value)">
 <br>
-GpCa:<input size="2" value="0.1238" onchange="changeConductances(6, this.value)">
+GpCa:<input size="5" value="0.1238" onchange="changeConductances(6, this.value)">
 <br>
-KmNa:<input size="2" value="40.0" onchange="changeConductances(7, this.value)">
+KmNa:<input size="5" value="40.0" onchange="changeConductances(7, this.value)">
 
 <br>
-KpCa:<input size="2" value="0.0005" onchange="changeConductances(8, this.value)">
+KpCa:<input size="5" value="0.0005" onchange="changeConductances(8, this.value)">
 <br>
-GpK:<input size="2" value="0.0146" onchange="changeConductances(9, this.value)">
+GpK:<input size="5" value="0.0146" onchange="changeConductances(9, this.value)">
 <br>
-pKNa:<input size="2" value="0.03" onchange="changeConductances(10, this.value)">
+pKNa:<input size="5" value="0.03" onchange="changeConductances(10, this.value)">
 
+<br>
+
+Current Scales:
+
+<br>
+
+IKr:<input size="5" value="1" onchange="changeConductances(11, this.value)">
+<br>
+IKs:<input size="5" value="1" onchange="changeConductances(12, this.value)">
+<br>
+IK1:<input size="5" value="1" onchange="changeConductances(13, this.value)">
+<br>
+Ito:<input size="5" value="1" onchange="changeConductances(14, this.value)">
+
+<br>
+INa:<input size="5" value="1" onchange="changeConductances(15, this.value)">
+<br>
+IbNa:<input size="5" value="1" onchange="changeConductances(16, this.value)">
+<br>
+ICaL:<input size="5" value="1" onchange="changeConductances(17, this.value)">
+<br>
+IbCa:<input size="5" value="1" onchange="changeConductances(18, this.value)">
+
+<br>
+INaK:<input size="5" value="1" onchange="changeConductances(19, this.value)">
+<br>
+IpCa:<input size="5" value="1" onchange="changeConductances(20, this.value)">
+<br>
+IpK:<input size="5" value="1" onchange="changeConductances(21, this.value)">
+
+<br>
 
 
 
