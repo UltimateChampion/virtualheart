@@ -385,9 +385,10 @@ void main(void) {
   float INa=GNa*sm*sm*sm*sh*sj*(v-Ena);
   float IKr=Gkr*Gkrfactor*sxr1*sxr2*(v-Ek);
   float IKs=Gks*sxs*sxs*(v-Eks);
-  //float sItot= scaleIKr*IKr + scaleIKs*IKs + scaleIK1*IK1 + scaleIto*Ito + scaleINa*INa + scaleIbNa*IbNa + scaleICaL*ICaL + scaleIbCa*IbCa + scaleINaK*INaK + scaleINaCa*INaCa + scaleIpCa*IpCa + scaleIpK*IpK;
 
-    float sItot=IKr+IKs+IK1+Ito+INa+IbNa+ICaL+IbCa+INaK+INaCa+IpCa+IpK;
+  float sItot= scaleIKr*IKr + scaleIKs*IKs + scaleIK1*IK1 + scaleIto*Ito + scaleINa*INa + scaleIbNa*IbNa + scaleICaL*ICaL + scaleIbCa*IbCa + scaleINaK*INaK + scaleINaCa*INaCa + scaleIpCa*IpCa + scaleIpK*IpK;
+
+  //  float sItot=IKr+IKs+IK1+Ito+INa+IbNa+ICaL+IbCa+INaK+INaCa+IpCa+IpK;
 
 
   float dNai=-(INa+IbNa+3.*INaK+3.*INaCa)*inverseVcFCAP;
@@ -636,17 +637,22 @@ function main() {
   gl.uniform1f(gl.getUniformLocation(prog4, "GpK"), xGpK);
   gl.uniform1f(gl.getUniformLocation(prog4, "pKNa"), xpKNa);
 
-  gl.uniform1f(gl.getUniformLocation(prog4, "scaleKr"), 1);
-  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIKs"), 1);
-  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIK1"), 1);
-  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIto"), 1);
-  gl.uniform1f(gl.getUniformLocation(prog4, "scaleINa"), 1);
-  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIbNa"), 1);
-  gl.uniform1f(gl.getUniformLocation(prog4, "scaleICaL"), 1);
-  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIbCa"), 1);
-  gl.uniform1f(gl.getUniformLocation(prog4, "scaleINaK"), 1);
-  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIpCa"), 1);
-  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIpK"), 1);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIKr"), 1.);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIKs"), 1.);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIK1"), 1.);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIto"), 1.);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleINa"), 1.);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIbNa"), 1.);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleICaL"), 1.);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIbCa"), 1.);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleINaK"), 1.);
+
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleINaCa"), 1.);
+
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIpCa"), 1.);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleIpK"), 1.);
+
+
 
 
   /////////////////////////
@@ -1727,9 +1733,11 @@ function changeConductances(index, value) {
               break;
     case (19): xscaleINaK = value;
               break;
-    case (20): xscaleIpCa = value;
+    case (20): xscaleINaCa = value;
               break;
-    case (21): xscaleIpK = value;
+    case (21): xscaleIpCa = value;
+              break;
+    case (22): xscaleIpK = value;
               break;
 
   }
@@ -1756,6 +1764,7 @@ function changeConductances(index, value) {
   gl.uniform1f(gl.getUniformLocation(prog4, "scaleICaL"), xscaleICaL);
   gl.uniform1f(gl.getUniformLocation(prog4, "scaleIbCa"), xscaleIbCa);
   gl.uniform1f(gl.getUniformLocation(prog4, "scaleINaK"), xscaleINaK);
+  gl.uniform1f(gl.getUniformLocation(prog4, "scaleINaCa"), xscaleINaCa);
   gl.uniform1f(gl.getUniformLocation(prog4, "scaleIpCa"), xscaleIpCa);
   gl.uniform1f(gl.getUniformLocation(prog4, "scaleIpK"), xscaleIpK);
 
@@ -1857,9 +1866,11 @@ IbCa:<input size="5" value="1" onchange="changeConductances(18, this.value)">
 <br>
 INaK:<input size="5" value="1" onchange="changeConductances(19, this.value)">
 <br>
-IpCa:<input size="5" value="1" onchange="changeConductances(20, this.value)">
+INaCa:<input size="5" value="1" onchange="changeConductances(20, this.value)">
 <br>
-IpK:<input size="5" value="1" onchange="changeConductances(21, this.value)">
+IpCa:<input size="5" value="1" onchange="changeConductances(21, this.value)">
+<br>
+IpK:<input size="5" value="1" onchange="changeConductances(22, this.value)">
 
 <br>
 
