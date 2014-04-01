@@ -139,4 +139,8 @@
 .toplevelshadow { /*shadow opacity. Doesn't work in IE*/
 	opacity: 0.5;
 }
+#c{
+	left: 5px;
+	top: 20px;
+}
 /* menu */
