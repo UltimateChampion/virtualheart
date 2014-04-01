@@ -1,7 +1,20 @@
-<html><head>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>Virtual Heart, Models</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="../templatemo_style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="../css/ddsmoothmenu.css" />
+<script type="text/javascript" src="js/jquery.min.js">
 
+/***********************************************
+* Smooth Navigational Menu- (c) Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* This notice MUST stay intact for legal use
+* Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+ ***********************************************/
+</script>
 <title>PDE on GPU</title>
 
 
@@ -592,17 +605,20 @@ function set_framerate(new_framerate) {
 
 <style type="text/css">
 
-  H1{ font-size: 120%; color: green}
+  H1{ font-size: 200%; color: gray}
 
 </style>
 
 </head>
 
+		<h1>Karma Model </h1>
 <body onload="main()">
 
-  <canvas id="c" width="512" height="512" style="position:relative"></canvas>
+	<!--  <canvas id="c" width="512" height="512" style="position:relative"></canvas> -->
+  <canvas id="c" width="512" height="512" style="position:absolute;margin-top:20px; border:1px solid #FFFFFF"></canvas>
 
-<table border="0">
+  <!-- <table border="0"> -->
+<table border="0" style="position:relative;margin-top:100px; margin-left:550px">
 
 <tbody>
 
@@ -653,11 +669,18 @@ increment: <input id="framerate_inc" value="10" type="text">
 
 </tbody></table>
 
-<div id="framerate"> framerate: 69fps</div>
+<div id="framerate" style="position:absolute;margin-top:100px;margin-left:550px"> framerate: 69fps</div>
 
 
 
-<div id="fframes">Total time: 2699.7</div>
+<div id="fframes" style="position:absolute;margin-top:100px;margin-left:850px">Total time: 2699.7</div>
+
+<div id="model description" style="postiion:absolute; margin-top:200px;margin-left:550px">
+	<p> A short description of the model</p>
+</div>
+
+
+
 
 <!-- <h1>Barkley's model of an excitable medium</h1>
 
@@ -687,7 +710,7 @@ Int. Journal of Bifurcation and Chaos, Vol. 7, No. 11 (1997) 2529-2545-->
 
 
 
-</p><hr>
+</p>
 
 
 
